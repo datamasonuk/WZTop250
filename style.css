@@ -27,10 +27,6 @@ body {
   }
   
 
-  tr:hover {
-    background-color: #eaf6ff;
-  }
-  
   td:first-child {
     font-weight: bold;
   }

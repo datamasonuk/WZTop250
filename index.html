@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Call of Duty: Warzone Ranking Chart</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">Warzone Ranked Top 250</h1>
+    <table class="table table-striped table-dark">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Rank</th>
+          <th scope="col">Gamertag</th>
+          <th scope="col">SR</th>
+        </tr>
+      </thead>
+      <tbody id="rankings">
+        <!-- Data will be dynamically inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Function to fetch data from the endpoint
+    async function fetchData() {
+      try {
+        const response = await fetch("https://telescope.callofduty.com/api/ts-api/lb/v1/global/title/wz2/ranked/br");
+        const data = await response.json();
+        return data.data.data.ranks;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        return [];
+      }
+    }
+
+    // Function to populate the ranking table with data
+    async function populateRankings() {
+      const rankings = await fetchData();
+
+      const tableBody = document.getElementById("rankings");
+
+      // Clear any existing data
+      tableBody.innerHTML = "";
+
+      // Iterate over each entry in the rankings
+      rankings.forEach((entry, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${entry.gamertag}</td>
+          <td>${entry.skillRating}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Populate the rankings when the page loads
+    populateRankings();
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>
